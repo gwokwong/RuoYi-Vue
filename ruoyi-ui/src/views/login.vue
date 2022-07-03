@@ -1,65 +1,80 @@
 <template>
-  <div class="login">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">若依后台管理系统</h3>
-      <el-form-item prop="username">
-        <el-input
-          v-model="loginForm.username"
-          type="text"
-          auto-complete="off"
-          placeholder="账号"
-        >
-          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input
-          v-model="loginForm.password"
-          type="password"
-          auto-complete="off"
-          placeholder="密码"
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="code" v-if="captchaOnOff">
-        <el-input
-          v-model="loginForm.code"
-          auto-complete="off"
-          placeholder="验证码"
-          style="width: 63%"
-          @keyup.enter.native="handleLogin"
-        >
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
-        </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" @click="getCode" class="login-code-img"/>
+
+  <div>
+
+  <!-- <div class="accountbg"></div>  -->
+
+    <!-- Begin page -->
+
+    <div class="wrapper-page">
+
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card card-pages shadow-none mt-4">
+                        <div class="card-body">
+                            <div class="text-center mt-0 mb-3">
+                                <a href="index.html" class="logo logo-admin">
+                                    <img src="@/assets/static/picture/logo-dark.png" class="mt-3" alt="" height="26"></a>
+                                <p class="text-muted w-75 mx-auto mb-4 mt-4">输入您的账号址和密码以访问管理面板</p>
+                            </div>
+
+                            <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="form-horizontal mt-4">
+                                 <el-form-item prop="username" class="form-group">
+                                    <div class="col-12">
+                                       <label for="username">账号</label>
+                                       <input class="form-control" v-model="loginForm.username" type="text" required="" id="username" placeholder="请输入账号"  ref="username">
+                                    </div>
+                                </el-form-item>
+
+
+                                <el-form-item prop="password" class="form-group">
+                                    <div class="col-12">
+                                       <label for="password">密码</label>
+                                       <input class="form-control" v-model="loginForm.password" type="password" required="" id="password" placeholder="请输入密码"  ref="password">
+                                    </div>
+                                </el-form-item>
+
+                                <div class="form-group">
+                                    <div class="col-12">
+                                        <div class="checkbox checkbox-primary">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1"> 记住密码</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                  <el-form-item class="form-group text-center mt-3">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary btn-block waves-effect waves-light"  type="primary" @click="handleLogin">登录</button>
+                                    </div>
+                                </el-form-item>
+
+                            </el-form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- end row -->
         </div>
-      </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
-      <el-form-item style="width:100%;">
-        <el-button
-          :loading="loading"
-          size="medium"
-          type="primary"
-          style="width:100%;"
-          @click.native.prevent="handleLogin"
-        >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
-        </el-button>
-        <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
-        </div>
-      </el-form-item>
-    </el-form>
-    <!--  底部  -->
-    <div class="el-login-footer">
-      <span>Copyright © 2018-2022 ruoyi.vip All Rights Reserved.</span>
     </div>
-  </div>
+
+    </div>
+
 </template>
+
+<script src='@/assets/static/js/jquery.min.js'></script>
+<script src="@/assets/static/js/bootstrap.bundle.min.js"></script>
+<script src="@/assets/static/js/jquery.slimscroll.js"></script>
+<script src="@/assets/static/js/waves.min.js"></script>
+<script src="@/assets/static/js/apexcharts.min.js"></script>
+<script src="@/assets/static/js/bootstrap-datepicker.min.js"></script>
+<script src="@/assets/static/js/app.js"></script>
 
 <script>
 import { getCodeImg } from "@/api/login";
@@ -89,7 +104,7 @@ export default {
       },
       loading: false,
       // 验证码开关
-      captchaOnOff: true,
+      captchaOnOff: false,
       // 注册开关
       register: false,
       redirect: undefined
@@ -104,19 +119,9 @@ export default {
     }
   },
   created() {
-    this.getCode();
     this.getCookie();
   },
   methods: {
-    getCode() {
-      getCodeImg().then(res => {
-        this.captchaOnOff = res.captchaOnOff === undefined ? true : res.captchaOnOff;
-        if (this.captchaOnOff) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
-          this.loginForm.uuid = res.uuid;
-        }
-      });
-    },
     getCookie() {
       const username = Cookies.get("username");
       const password = Cookies.get("password");
@@ -128,6 +133,7 @@ export default {
       };
     },
     handleLogin() {
+      console.log('in this')
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -140,9 +146,12 @@ export default {
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
+         console.log('运行到这里')
           this.$store.dispatch("Login", this.loginForm).then(() => {
+            console.log('运行到这里2')
             this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
           }).catch(() => {
+            console.log('运行异常')
             this.loading = false;
             if (this.captchaOnOff) {
               this.getCode();
@@ -154,6 +163,7 @@ export default {
   }
 };
 </script>
+
 
 <style rel="stylesheet/scss" lang="scss">
 .login {

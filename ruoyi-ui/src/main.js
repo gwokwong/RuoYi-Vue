@@ -3,6 +3,19 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 
 import Element from 'element-ui'
+
+
+/**新引入的css */
+import '@/assets/static/css/bootstrap-datepicker.min.css'
+import '@/assets/static/css/bootstrap.min.css'
+import '@/assets/static/css/icons.css'
+import '@/assets/static/css/style.css'
+
+
+import '@/assets/styles/index.scss' // global css
+import '@/assets/styles/ruoyi.scss' // ruoyi css
+
+
 import './assets/styles/element-variables.scss'
 
 import '@/assets/styles/index.scss' // global css
